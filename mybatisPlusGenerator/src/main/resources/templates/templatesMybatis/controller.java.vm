@@ -1,0 +1,103 @@
+package ${package.Controller};
+
+#if(${cfg.restControllerStyle})
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import ${package.Service}.${table.serviceName};
+import ${package.Entity}.qo.${entity}Qo;
+import ${package.Entity}.vo.${entity}Vo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.List;
+import ${package.Entity}.model.JsonResult;
+
+/**
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${cfg.restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+    private final Logger logger = LoggerFactory.getLogger(${table.controllerName}.class);
+
+    private ${table.serviceName} i${entity}Service;
+
+    @Autowired
+    public void ${table.controllerName}(${table.serviceName} i${entity}Service){
+        this.i${entity}Service = i${entity}Service;
+    }
+/**
+    * 获取list
+     * @param ${table.entityPath}Qo
+    * @return
+     */
+    @GetMapping("list")
+    public JsonResult<List<${entity}Vo>> list(${entity}Qo ${table.entityPath}Qo){
+        return JsonResult.success(i${entity}Service.selectList(${table.entityPath}Qo));
+    }
+
+    /**
+    * 获取实体
+    * @param id  实体ID
+     * @return 0 失败  1 成功
+    */
+    @GetMapping("{id}")
+    public JsonResult<${entity}Vo> get(@PathVariable(value = "id") Integer id){
+        return JsonResult.success(i${entity}Service.get(id));
+    }
+
+
+    /**
+    * 保存
+    * @param ${table.entityPath}Qo 传递的实体
+    * @return 0 失败  1 成功
+    */
+    @GetMapping("/add")
+    public JsonResult ${table.entityPath}Save(${entity}Qo ${table.entityPath}Qo){
+        i${entity}Service.save(${table.entityPath}Qo);
+        return JsonResult.success();
+    }
+
+    /**
+    * 更新
+     * @param ${table.entityPath}Qo  实体
+     * @return 0 失败  1 成功
+     */
+    @GetMapping("/update")
+    public JsonResult ${table.entityPath}Update(${entity}Qo ${table.entityPath}Qo){
+        i${entity}Service.updateById(${table.entityPath}Qo);
+        return JsonResult.success();
+    }
+
+    /**
+    * 根据id删除对象
+    * @param id  实体ID
+    * @return 0 失败  1 成功
+    */
+    @PostMapping("/delete")
+    public JsonResult ${table.entityPath}Delete(Integer id){
+        i${entity}Service.deleteById(id);
+        return JsonResult.success();
+    }
+
+}

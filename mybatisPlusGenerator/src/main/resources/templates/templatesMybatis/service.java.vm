@@ -1,0 +1,31 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import ${package.Entity}.qo.${entity}Qo;
+import ${package.Entity}.vo.${entity}Vo;
+import ${superServiceClassPackage};
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment} 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+
+    ${entity}Vo get(Integer id);
+
+    boolean save(${entity}Qo ${table.entityPath}Qo);
+
+    boolean updateById(${entity}Qo ${table.entityPath}Qo);
+
+    List<${entity}Vo> selectList(${entity}Qo ${table.entityPath}Qo);
+
+    void deleteById(Integer id);
+
+    IPage<${entity}> getPages(Long current, Long size, ${entity}Qo ${table.entityPath}Qo);
+}
